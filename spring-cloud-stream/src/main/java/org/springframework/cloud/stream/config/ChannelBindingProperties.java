@@ -21,6 +21,7 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -42,7 +43,15 @@ public class ChannelBindingProperties {
 	private Map<String,Object> bindings = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	public Properties getConsumerProperties() {
-		return this.consumerProperties;
+		if ("-1".equals(consumerProperties.getProperty("partitionIndex"))) {
+			String instanceIndex = System.getenv("INSTANCE_INDEX");
+			if (instanceIndex == null) {
+				instanceIndex = System.getenv("CF_INSTANCE_INDEX");
+			}
+			Assert.notNull(instanceIndex, "partitionIndex=-1 but unable to determine index from the environment");
+			consumerProperties.setProperty("partitionIndex", instanceIndex);
+		}
+		return consumerProperties;
 	}
 
 	public void setConsumerProperties(Properties consumerProperties) {
