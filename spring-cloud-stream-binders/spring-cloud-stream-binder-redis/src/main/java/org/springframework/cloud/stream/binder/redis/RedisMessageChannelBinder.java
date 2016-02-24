@@ -312,10 +312,10 @@ public class RedisMessageChannelBinder extends AbstractBinder<MessageChannel> {
 		private SendingHandler(String bindingName, RedisPropertiesAccessor properties) {
 			this.bindingName = bindingName;
 			this.accessor = properties;
-			this.setBeanFactory(RedisMessageChannelBinder.this.getBeanFactory());
-			this.partitionHandler = new PartitionHandler(
-					(ConfigurableListableBeanFactory) getBeanFactory(),
-					evaluationContext, partitionSelector, properties, properties.getNextModuleCount());
+			ConfigurableListableBeanFactory beanFactory = RedisMessageChannelBinder.this.getBeanFactory();
+			this.setBeanFactory(beanFactory);
+			this.partitionHandler = new PartitionHandler(beanFactory, evaluationContext, partitionSelector,
+					properties, properties.getNextModuleCount());
 			refreshChannelAdapters();
 		}
 

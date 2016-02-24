@@ -797,10 +797,10 @@ public class RabbitMessageChannelBinder extends AbstractBinder<MessageChannel> {
 		private SendingHandler(MessageHandler delegate, String replyTo, RabbitPropertiesAccessor properties) {
 			this.delegate = delegate;
 			this.replyTo = replyTo;
-			this.partitionHandler = new PartitionHandler(
-					(ConfigurableListableBeanFactory) getBeanFactory(),
-					evaluationContext, partitionSelector, properties, properties.getNextModuleCount());
-			this.setBeanFactory(RabbitMessageChannelBinder.this.getBeanFactory());
+			ConfigurableListableBeanFactory beanFactory = RabbitMessageChannelBinder.this.getBeanFactory();
+			this.setBeanFactory(beanFactory);
+			this.partitionHandler = new PartitionHandler(beanFactory, evaluationContext, partitionSelector,
+					properties, properties.getNextModuleCount());
 		}
 
 		@Override

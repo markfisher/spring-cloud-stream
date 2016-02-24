@@ -16,9 +16,6 @@
 
 package org.springframework.cloud.stream.binder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -40,7 +37,6 @@ import org.springframework.util.StringUtils;
  * @author Marius Bogoevici
  */
 public class PartitionHandler {
-	private static final Logger logger = LoggerFactory.getLogger(PartitionHandler.class);
 
 	private final ConfigurableListableBeanFactory beanFactory;
 

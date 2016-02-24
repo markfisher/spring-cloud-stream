@@ -166,12 +166,6 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel> {
 
 	private static final boolean DEFAULT_SYNC_PRODUCER = false;
 
-	private static final StartOffset DEFAULT_START_OFFSET = StartOffset.latest;
-
-	private RetryOperations retryOperations;
-
-	private Map<String, Collection<Partition>> topicsInUse = new HashMap<>();
-
 	protected static final Set<Object> PRODUCER_COMPRESSION_PROPERTIES = new HashSet<Object>(
 			Arrays.asList(new String[] {
 				KafkaMessageChannelBinder.COMPRESSION_CODEC,
@@ -208,6 +202,10 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel> {
 			.addAll(PRODUCER_BATCHING_BASIC_PROPERTIES)
 			.addAll(PRODUCER_COMPRESSION_PROPERTIES)
 			.build();
+
+	private RetryOperations retryOperations;
+
+	private final Map<String, Collection<Partition>> topicsInUse = new HashMap<>();
 
 	private final EmbeddedHeadersMessageConverter embeddedHeadersMessageConverter = new
 			EmbeddedHeadersMessageConverter();
@@ -846,11 +844,11 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel> {
 				ProducerConfiguration<byte[], byte[]> producerConfiguration) {
 			this.topicName = topicName;
 			this.numberOfKafkaPartitions = numberOfPartitions;
-			this.setBeanFactory(KafkaMessageChannelBinder.this.getBeanFactory());
+			ConfigurableListableBeanFactory beanFactory = KafkaMessageChannelBinder.this.getBeanFactory();
+			this.setBeanFactory(beanFactory);
 			this.producerConfiguration = producerConfiguration;
-			this.partitionHandler = new PartitionHandler(
-					(ConfigurableListableBeanFactory) getBeanFactory(),
-					evaluationContext, partitionSelector, properties, numberOfPartitions);
+			this.partitionHandler = new PartitionHandler(beanFactory, evaluationContext, partitionSelector,
+					properties, numberOfPartitions);
 		}
 
 		@Override
