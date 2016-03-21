@@ -154,7 +154,7 @@ public class RabbitMessageChannelBinder extends AbstractBinder<MessageChannel, E
 
 	private volatile boolean clustered;
 
-	private RabbitExtendedPropertiesRegistry rabbitExtendedPropertiesRegistry = new RabbitExtendedPropertiesRegistry();
+	private RabbitExtendedBindingProperties extendedBindingProperties = new RabbitExtendedBindingProperties();
 
 	public RabbitMessageChannelBinder(ConnectionFactory connectionFactory) {
 		Assert.notNull(connectionFactory, "connectionFactory must not be null");
@@ -206,9 +206,8 @@ public class RabbitMessageChannelBinder extends AbstractBinder<MessageChannel, E
 		this.password = password;
 	}
 
-	public void setRabbitExtendedPropertiesRegistry(
-			RabbitExtendedPropertiesRegistry rabbitExtendedPropertiesRegistry) {
-		this.rabbitExtendedPropertiesRegistry = rabbitExtendedPropertiesRegistry;
+	public void setExtendedBindingProperties(RabbitExtendedBindingProperties extendedBindingProperties) {
+		this.extendedBindingProperties = extendedBindingProperties;
 	}
 
 	public void setVhost(String vhost) {
@@ -237,13 +236,13 @@ public class RabbitMessageChannelBinder extends AbstractBinder<MessageChannel, E
 
 	@Override
 	public RabbitConsumerProperties getExtendedConsumerProperties(String channelName) {
-		return rabbitExtendedPropertiesRegistry.getExtendedConsumerProperties(channelName);
+		return extendedBindingProperties.getExtendedConsumerProperties(channelName);
 	}
 
 
 	@Override
 	public RabbitProducerProperties getExtendedProducerProperties(String channelName) {
-		return rabbitExtendedPropertiesRegistry.getExtendedProducerProperties(channelName);
+		return extendedBindingProperties.getExtendedProducerProperties(channelName);
 	}
 
 	@Override

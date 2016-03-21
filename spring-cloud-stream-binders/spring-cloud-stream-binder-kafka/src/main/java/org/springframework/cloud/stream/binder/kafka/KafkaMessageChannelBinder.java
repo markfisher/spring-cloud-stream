@@ -150,7 +150,7 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel, Ex
 
 	private ProducerListener producerListener;
 
-	private KafkaExtendedPropertiesRegistry kafkaExtendedPropertiesRegistry = new KafkaExtendedPropertiesRegistry();
+	private KafkaExtendedBindingProperties extendedBindingProperties = new KafkaExtendedBindingProperties();
 
 	public KafkaMessageChannelBinder(ZookeeperConnect zookeeperConnect, String brokers, String zkAddress,
 									 String... headersToMap) {
@@ -204,6 +204,10 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel, Ex
 	 */
 	public void setRetryOperations(RetryOperations retryOperations) {
 		this.retryOperations = retryOperations;
+	}
+
+	public void setExtendedBindingProperties(KafkaExtendedBindingProperties extendedBindingProperties) {
+		this.extendedBindingProperties = extendedBindingProperties;
 	}
 
 	@Override
@@ -291,12 +295,12 @@ public class KafkaMessageChannelBinder extends AbstractBinder<MessageChannel, Ex
 
 	@Override
 	public KafkaConsumerProperties getExtendedConsumerProperties(String channelName) {
-		return kafkaExtendedPropertiesRegistry.getExtendedConsumerProperties(channelName);
+		return extendedBindingProperties.getExtendedConsumerProperties(channelName);
 	}
 
 	@Override
 	public KafkaProducerProperties getExtendedProducerProperties(String channelName) {
-		return kafkaExtendedPropertiesRegistry.getExtendedProducerProperties(channelName);
+		return extendedBindingProperties.getExtendedProducerProperties(channelName);
 	}
 
 	Map<String, Collection<Partition>> getTopicsInUse() {

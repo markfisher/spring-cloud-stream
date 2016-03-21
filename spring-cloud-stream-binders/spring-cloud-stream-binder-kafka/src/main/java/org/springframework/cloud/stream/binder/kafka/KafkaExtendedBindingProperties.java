@@ -14,47 +14,47 @@
  * limitations under the License.
  */
 
-package org.springframework.cloud.stream.binder.rabbit;
+package org.springframework.cloud.stream.binder.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.stream.binder.ExtendedPropertiesRegistry;
+import org.springframework.cloud.stream.binder.ExtendedBindingProperties;
 
 /**
  * @author Marius Bogoevici
  */
-@ConfigurationProperties("spring.cloud.stream.rabbit")
-public class RabbitExtendedPropertiesRegistry implements ExtendedPropertiesRegistry<RabbitConsumerProperties, RabbitProducerProperties> {
+@ConfigurationProperties("spring.cloud.stream.kafka")
+public class KafkaExtendedBindingProperties implements ExtendedBindingProperties<KafkaConsumerProperties, KafkaProducerProperties> {
 
-	private Map<String, RabbitBindingProperties> bindings = new HashMap<>();
+	private Map<String, KafkaBindingProperties> bindings = new HashMap<>();
 
-	public Map<String, RabbitBindingProperties> getBindings() {
+	public Map<String, KafkaBindingProperties> getBindings() {
 		return bindings;
 	}
 
-	public void setBindings(Map<String, RabbitBindingProperties> bindings) {
+	public void setBindings(Map<String, KafkaBindingProperties> bindings) {
 		this.bindings = bindings;
 	}
 
 	@Override
-	public RabbitConsumerProperties getExtendedConsumerProperties(String channelName) {
+	public KafkaConsumerProperties getExtendedConsumerProperties(String channelName) {
 		if (bindings.containsKey(channelName) && bindings.get(channelName).getConsumer() != null) {
 			return bindings.get(channelName).getConsumer();
 		}
 		else {
-			return new RabbitConsumerProperties();
+			return new KafkaConsumerProperties();
 		}
 	}
 
 	@Override
-	public RabbitProducerProperties getExtendedProducerProperties(String channelName) {
+	public KafkaProducerProperties getExtendedProducerProperties(String channelName) {
 		if (bindings.containsKey(channelName) && bindings.get(channelName).getProducer() != null) {
 			return bindings.get(channelName).getProducer();
 		}
 		else {
-			return new RabbitProducerProperties();
+			return new KafkaProducerProperties();
 		}
 	}
 }

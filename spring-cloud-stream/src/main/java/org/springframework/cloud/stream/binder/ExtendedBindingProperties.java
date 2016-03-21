@@ -17,10 +17,12 @@
 package org.springframework.cloud.stream.binder;
 
 /**
+ * Properties that extend the common binding properties for a particular binder implementation.
  *
  * @author Marius Bogoevici
+ * @author Mark Fisher
  */
-public interface ExtendedPropertiesRegistry<C, P> {
+public interface ExtendedBindingProperties<C, P> {
 
 	C getExtendedConsumerProperties(String channelName);
 
